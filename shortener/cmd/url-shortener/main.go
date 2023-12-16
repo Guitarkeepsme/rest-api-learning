@@ -21,6 +21,7 @@ func main() {
 	log := setupLogger(cfg.Env)
 
 	log.Info("starting shortener")
+	log.Debug("debug messages are enabled", slog.String("env", cfg.Env))
 
 	// ToDo: init logger: slog
 
