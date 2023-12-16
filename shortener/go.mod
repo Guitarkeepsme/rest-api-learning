@@ -1,4 +1,4 @@
-module shortener
+module shortnener
 
 go 1.21.1
 
