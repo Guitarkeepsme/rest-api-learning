@@ -1,10 +1,12 @@
 package main
 
 import (
-	"fmt"
 	"log/slog"
 	"os"
-	"shortnener/internal/config"
+
+	"shortener/internal/config"
+	"shortener/internal/lib/logger/sl"
+	"shortener/internal/storage/sqlite"
 )
 
 const (
@@ -15,17 +17,18 @@ const (
 
 func main() {
 	cfg := config.MustLoadConfig()
-
-	fmt.Println(cfg)
-
 	log := setupLogger(cfg.Env)
 
 	log.Info("starting shortener")
 	log.Debug("debug messages are enabled", slog.String("env", cfg.Env))
 
-	// ToDo: init logger: slog
+	storage, err := sqlite.New(cfg.StoragePath)
+	if err != nil {
+		log.Error("failed to create storage", sl.Err(err))
+		os.Exit(1)
+	}
 
-	// ToDo: init storage: sqlite
+	_ = storage
 
 	// ToDo: init router: chi, render
 
