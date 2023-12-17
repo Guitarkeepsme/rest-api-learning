@@ -21,8 +21,14 @@ type HTTPServer struct {
 }
 
 func MustLoadConfig() *Config {
-	configPath := os.Getenv("CONFIG_PATH")
-	if configPath == "" {
+	// Надо брать из переменной окружения, а адрес должен быть относительным. Но почему-то
+	// у меня ни то, ни другое на работает. Потом исправлю, а пока вот так:
+	err := os.Setenv("CONFIG_PATH", "/Users/alexeykashurnikov/golang/rest api learning/shortener/config/local.yaml")
+	if err != nil {
+		log.Fatal(err)
+	}
+	configPath, ok := os.LookupEnv("CONFIG_PATH")
+	if !ok {
 		log.Fatal("CONFIG_PATH env var is not set")
 	}
 
