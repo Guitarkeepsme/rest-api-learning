@@ -15,7 +15,7 @@ import (
 	"shortener/internal/http-server/handlers/url/save"
 
 	"shortener/internal/http-server/handlers/url/save/mocks"
-	"shortener/internal/lib/logger/handlers/slogdiscard"
+	"shortener/internal/http-server/middleware/logger/handlers/slogdiscard"
 )
 
 func TestSaveHandler(t *testing.T) {
@@ -63,7 +63,7 @@ func TestSaveHandler(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			urlSaverMock := mocks.NewURLSaver(t)
+			urlSaverMock := mocks.NewURLsaver(t)
 
 			if tc.respError == "" || tc.mockError != nil {
 				urlSaverMock.On("SaveURL", tc.url, mock.AnythingOfType("string")).

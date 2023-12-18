@@ -29,7 +29,7 @@ func main() {
 	cfg := config.MustLoadConfig()
 	log := setupLogger(cfg.Env)
 
-	log.Info("starting shortener")
+	log.Info("starting shortener", slog.String("env", cfg.Env), slog.String("version", "1"))
 	log.Debug("debug messages are enabled", slog.String("env", cfg.Env))
 
 	storage, err := sqlite.New(cfg.StoragePath)
@@ -46,6 +46,7 @@ func main() {
 	router.Use(middleware.Recoverer)
 
 	router.Post("/url", save.New(log, storage))
+	// router.Get("{alias}", redirect.New(log, storage))
 
 	log.Info("starting server", slog.String("address", cfg.Addr))
 
