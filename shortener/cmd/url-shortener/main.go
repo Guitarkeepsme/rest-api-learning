@@ -12,6 +12,8 @@ import (
 
 	"shortener/internal/lib/logger/handlers/slogpretty"
 
+	"shortener/internal/http-server/middleware/handlers/url/save"
+
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 )
@@ -29,7 +31,7 @@ func main() {
 	log.Info("starting shortener")
 	log.Debug("debug messages are enabled", slog.String("env", cfg.Env))
 
-	_, err := sqlite.New(cfg.StoragePath)
+	storage, err := sqlite.New(cfg.StoragePath)
 	if err != nil {
 		log.Error("failed to create storage", sl.Err(err))
 		os.Exit(1)
@@ -41,7 +43,8 @@ func main() {
 	router.Use(middleware.Logger)
 	router.Use(mwLogger.New(log)) // логер, сделанный вручную, отчасти дублирует роутер чи, но он полезен
 	router.Use(middleware.Recoverer)
-	// ToDo: init router: chi, render
+
+	router.Post("/url", save.New(log, storage))
 
 	// ToDo: init server:
 }
