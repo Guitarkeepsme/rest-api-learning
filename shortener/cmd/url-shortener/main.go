@@ -13,6 +13,7 @@ import (
 
 	"shortener/internal/lib/logger/handlers/slogpretty"
 
+	"shortener/internal/http-server/handlers/redirect"
 	"shortener/internal/http-server/handlers/url/save"
 
 	"github.com/go-chi/chi/v5"
@@ -46,7 +47,8 @@ func main() {
 	router.Use(middleware.Recoverer)
 
 	router.Post("/url", save.New(log, storage))
-	// router.Get("{alias}", redirect.New(log, storage))
+	router.Get("{alias}", redirect.New(log, storage))
+	// ToDo: rounter.Delete("/url/{alias}", redirect.New(log, storage))
 
 	log.Info("starting server", slog.String("address", cfg.Addr))
 
