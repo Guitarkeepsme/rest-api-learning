@@ -4,4 +4,6 @@ http_server:
   adress: "localhost:8081"
   timeout: 4s
   idle_timeout: 60s
+  user: "myuser"
+  password: "mypass"
   

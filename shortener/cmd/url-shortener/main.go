@@ -46,8 +46,17 @@ func main() {
 	router.Use(mwLogger.New(log)) // логер, сделанный вручную, отчасти дублирует роутер чи, но он полезен
 	router.Use(middleware.Recoverer)
 
+	router.Route("/url", func(r chi.Router) {
+		r.Use(middleware.BasicAuth("shortener", map[string]string{
+			cfg.HTTPServer.Username: cfg.HTTPServer.Password,
+		}))
+
+		r.Post("/", save.New(log, storage))
+		//ToDo: add DELETE handler
+	})
+
 	router.Post("/url", save.New(log, storage))
-	router.Get("{alias}", redirect.New(log, storage))
+	router.Get("/{alias}", redirect.New(log, storage))
 	// ToDo: rounter.Delete("/url/{alias}", redirect.New(log, storage))
 
 	log.Info("starting server", slog.String("address", cfg.Addr))
