@@ -5,16 +5,16 @@ import (
 	"net/http"
 	"os"
 
-	"shortener/internal/config"
-	"shortener/internal/lib/logger/sl"
-	"shortener/internal/storage/sqlite"
+	"url-shortener/internal/config"
+	"url-shortener/internal/lib/logger/sl"
+	"url-shortener/internal/storage/sqlite"
 
-	mwLogger "shortener/internal/http-server/middleware/logger"
+	mwLogger "url-shortener/internal/http-server/middleware/logger"
 
-	"shortener/internal/lib/logger/handlers/slogpretty"
+	"url-shortener/internal/lib/logger/handlers/slogpretty"
 
-	"shortener/internal/http-server/handlers/redirect"
-	"shortener/internal/http-server/handlers/url/save"
+	"url-shortener/internal/http-server/handlers/redirect"
+	"url-shortener/internal/http-server/handlers/url/save"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -30,7 +30,7 @@ func main() {
 	cfg := config.MustLoadConfig()
 	log := setupLogger(cfg.Env)
 
-	log.Info("starting shortener", slog.String("env", cfg.Env), slog.String("version", "1"))
+	log.Info("starting url-shortener", slog.String("env", cfg.Env), slog.String("version", "1"))
 	log.Debug("debug messages are enabled", slog.String("env", cfg.Env))
 
 	storage, err := sqlite.New(cfg.StoragePath)
@@ -47,7 +47,7 @@ func main() {
 	router.Use(middleware.Recoverer)
 
 	router.Route("/url", func(r chi.Router) {
-		r.Use(middleware.BasicAuth("shortener", map[string]string{
+		r.Use(middleware.BasicAuth("url-shortener", map[string]string{
 			cfg.HTTPServer.Username: cfg.HTTPServer.Password,
 		}))
 

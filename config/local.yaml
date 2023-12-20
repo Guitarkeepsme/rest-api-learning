@@ -1,5 +1,5 @@
 env: "local" # dev, prod
-storage_path: "/Users/alexeykashurnikov/golang/rest api learning/shortener/storage/storage.db" # относительный адрес опять не сработал
+storage_path: "/Users/alexeykashurnikov/golang/rest api learning/url-shortener/storage/storage.db" # относительный адрес опять не сработал
 http_server: 
   adress: "localhost:8082"
   timeout: 4s

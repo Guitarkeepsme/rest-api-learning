@@ -25,7 +25,7 @@ type HTTPServer struct {
 func MustLoadConfig() *Config {
 	// Надо брать из переменной окружения, а адрес должен быть относительным. Но почему-то
 	// у меня ни то, ни другое на работает. Потом исправлю, а пока вот так:
-	err := os.Setenv("CONFIG_PATH", "/Users/alexeykashurnikov/golang/rest api learning/shortener/config/local.yaml")
+	err := os.Setenv("CONFIG_PATH", "/Users/alexeykashurnikov/golang/rest api learning/url-shortener/config/local.yaml")
 	if err != nil {
 		log.Fatal(err)
 	}
