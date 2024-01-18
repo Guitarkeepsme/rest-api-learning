@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log/slog"
 	"net/http"
 	"os"
@@ -9,6 +10,7 @@ import (
 	"url-shortener/internal/lib/logger/sl"
 	"url-shortener/internal/storage/sqlite"
 
+	ssogrpc "url-shortener/internal/clients/sso/grpc"
 	mwLogger "url-shortener/internal/http-server/middleware/logger"
 
 	"url-shortener/internal/lib/logger/handlers/slogpretty"
@@ -32,6 +34,19 @@ func main() {
 
 	log.Info("starting url-shortener", slog.String("env", cfg.Env), slog.String("version", "1"))
 	log.Debug("debug messages are enabled", slog.String("env", cfg.Env))
+
+	ssoClient, err := ssogrpc.New(
+		context.Background(),
+		log,
+		cfg.Clients.SSO.Address,
+		cfg.Clients.SSO.Timeout,
+		cfg.Clients.SSO.RetriesCount,
+	)
+	if err != nil {
+		log.Error("error while creating sso", sl.Err(err))
+	}
+
+	ssoClient.IsAdmin(context.Background(), 1)
 
 	storage, err := sqlite.New(cfg.StoragePath)
 	if err != nil {
